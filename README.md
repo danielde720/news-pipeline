@@ -22,7 +22,7 @@
 ## <p align="center"> Overview </p>
 
 
-This project is an event-driven, decoupled architecture designed to fetch the latest news about the boxer Canelo Alvarez, who recently had a significant fight. The pipeline leverages various AWS services and is built to be resilient,scalable and easily maintainable.
+This project is an event-driven, decoupled architecture designed to fetch the latest news about the boxer Canelo Alvarez, who recently had a significant fight. The pipeline leverages various AWS services and is built to be resilient,scalable and easily maintainable. Im using a News API that provides up-to-date information about pretty much anything you can think of however its not real time data it has a 24 hour latency. You can get your own API key from [News API](https://newsapi.org/). We created a s3 bucket with 2 prefixes one for the raw data and one for the transformed data. We then created our lambda functions fetch_load which fetches the data from the api in batches and then saves and loads it into the raw bucket and then trigger_glue for transformation and loading into the transformed data bucket and along with our utility function which functions as a error handler for both fetch_data and trigger_glue and the glue notebook that grabs data from the raw bucket, flattens it and transform the files from json to parquet and we partition everything by dates to solve a incremental loading problem that I had without using partitions and overall it just looks cleaner and more organized
 
 ### <p align="center"> Event-Driven Architecture </p>
 
@@ -32,13 +32,12 @@ The pipeline is initiated by an AWS EventBridge that triggers a Lambda function 
 
 Each component in this pipeline is designed to be loosely coupled, allowing for greater flexibility and easier maintenance. The components react to events rather than being directly invoked, making the system more robust and easier to manage.
 
-### <p align="center"> News Api </p>
-
-The news data is sourced from a News API that provides up-to-date information about Canelo Alvarez. You can get your own API key from [News API](https://newsapi.org/).
 
 ### <p align="center"> Monitoring Slack Notifications </p>
 
-The pipeline is monitored using Slack notifications. If any component fails, a notification is sent immediately, enabling quick troubleshooting and resolution.
+
+The pipeline is monitored using Slack notifications. If any component fails, a notification is sent immediately, enabling quick troubleshooting and resolution. We've implemented a utility function that both `fetch_load` and `trigger_glue` Lambda functions import, allowing for consistent and centralized monitoring across different components of the pipeline.
+
 
 ### <p align="center"> Development and Deployment </p>
 
