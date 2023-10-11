@@ -34,15 +34,18 @@ def fetch_news():
     return all_articles
 
 def save_articles_to_file(articles, current_date):
+    if not articles:
+        logging.warning('No articles to save.')
     file_name = f"/tmp/all_news_{current_date}.json"
     logging.info(f"Saving articles to {file_name}")  
     with open(file_name, 'w') as f:
         json.dump(articles, f)
     logging.info(f"Successfully saved articles to {file_name}")  
+    return True
 
 def upload_file_to_s3(current_date):
     file_name = f"/tmp/all_news_{current_date}.json"
-    s3_key = f"raw-data/{current_date}/{file_name}"
+    s3_key = f"raw-data/{current_date}/all_news_{current_date}.json"
     logging.info(f"Uploading {file_name} to S3")
     s3.upload_file(
         Filename=file_name,
@@ -58,8 +61,10 @@ def lambda_handler(event, context):
         
         current_date = datetime.now().strftime('%Y-%m-%d')
         articles = fetch_news()
-        save_articles_to_file(articles, current_date)
-        upload_file_to_s3(current_date)
+        file_saved = save_articles_to_file(articles, current_date)  # Capture the return flag
+        if file_saved:  # Only upload if the file was saved
+            upload_file_to_s3(current_date)
+        
         
         logging.info("Lambda function executed successfully")
         
@@ -76,6 +81,6 @@ def lambda_handler(event, context):
         
     except Exception as e:
         logging.error(f"An error occurred: {str(e)}")
-        utils.send_notification(f"An error occurred in Lambda function: {str(e)}")
+        utils.send_notification(f"An error occurred in the fetch_load Lambda function: {str(e)}")
         raise  # Re-raise the exception to AWS Lambda
 

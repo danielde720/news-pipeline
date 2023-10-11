@@ -1,8 +1,6 @@
 from aws_cdk import (
     Stack,
     aws_lambda as lambda_,
-    aws_stepfunctions as sfn,
-    aws_stepfunctions_tasks as tasks,
     aws_s3 as s3,
     Duration
     
