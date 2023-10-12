@@ -57,7 +57,7 @@ By combining these technologies, this pipeline offers a reliable and efficient w
 
 ### <p align="center"> Initial Struggles with AWS Lambda UI</p>
 
-When I started using AWS Lambda through its UI, I ran into some challenges. Debugging was a real pain , I had to delete old zip files, create new ones, and download them locally for each debugging attempt since I was on a virtual machine.Enter AWS Cloud Development Kit (CDK). CDK made everything so much more convenient, organized, and efficient. The best part? I could debug issues right then and there, without going through a maze of steps.
+When I started using AWS Lambda through its UI, I ran into some challenges. Debugging was a real pain , I had to delete old zip files, create new ones, and download them locally in order to upload it to lambda for each debugging attempt since I was on a virtual machine.Enter AWS Cloud Development Kit (CDK). CDK made everything so much more convenient, organized, and efficient. The best part? I could debug issues right then and there, without going through a maze of steps.
 
 ### <p align="center">Lambda Functions: To Multiply or Not?</p>
 
