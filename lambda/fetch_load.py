@@ -1,4 +1,4 @@
-from error_handler import Utils  
+from error_handler import Utils  #our error handling function
 import logging
 import requests
 import json
@@ -16,6 +16,7 @@ API_KEY = os.getenv("NEWS_API_KEY")
 URL = f"https://newsapi.org/v2/everything?q=canelo&apiKey={API_KEY}"
 s3 = boto3.client('s3')
 
+#function to fetch data from the api 
 def fetch_news():
     all_articles = []
     for i in range(1, 6):
@@ -32,7 +33,7 @@ def fetch_news():
             logging.error(f"Failed to fetch news: {response.status_code}")
         time.sleep(1)
     return all_articles
-
+#function to save the data 
 def save_articles_to_file(articles, current_date):
     if not articles:
         logging.warning('No articles to save.')
@@ -43,6 +44,7 @@ def save_articles_to_file(articles, current_date):
     logging.info(f"Successfully saved articles to {file_name}")  
     return True
 
+#function to upload to s3
 def upload_file_to_s3(current_date):
     file_name = f"/tmp/all_news_{current_date}.json"
     s3_key = f"raw-data/{current_date}/all_news_{current_date}.json"
@@ -53,7 +55,7 @@ def upload_file_to_s3(current_date):
         Key=s3_key
     )
     logging.info(f"Successfully uploaded {file_name} to S3")
-
+#defining the handler for lambda 
 def lambda_handler(event, context):
     utils = Utils()
     try:
@@ -61,7 +63,7 @@ def lambda_handler(event, context):
         
         current_date = datetime.now().strftime('%Y-%m-%d')
         articles = fetch_news()
-        file_saved = save_articles_to_file(articles, current_date)  # Capture the return flag
+        file_saved = save_articles_to_file(articles, current_date)  
         if file_saved:  # Only upload if the file was saved
             upload_file_to_s3(current_date)
         

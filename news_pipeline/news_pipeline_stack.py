@@ -15,6 +15,7 @@ class NewsPipelineStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
+        #defining our layers 
         dotenv_layer = lambda_.LayerVersion(self, "DotenvLayer",
             code=lambda_.Code.from_asset("lambda_layers/python_dotenv"),
             compatible_runtimes=[lambda_.Runtime.PYTHON_3_11],
@@ -26,7 +27,7 @@ class NewsPipelineStack(Stack):
             layer_version_name="requests-layer"
         )
 
-
+        #defining our resources to deploy 
         fetch_load_lambda = lambda_.Function(
             self,
             "fetch_load_cdk",
@@ -41,7 +42,7 @@ class NewsPipelineStack(Stack):
             timeout=Duration.seconds(20)
         )
 
-
+        #defining our resources to deploy
         trigger_glue_lambda = lambda_.Function(
             self,
             "trigger_glue_CDK",
