@@ -10,13 +10,13 @@
 ## <p align='center'> Tech Stack </p>
 
 
-<p align='center'> - **EC2**: Elastic Compute Cloud for virtual servers.</p>
-<p align='center'> - **S3**: Simple Storage Service for data storage.</p>
-<p align='center'> - **Lambda**: Serverless compute service.</p>
-<p align='center'> - **CDK**: Cloud Development Kit for infrastructure as code.</p>
-<p align='center'> - **SAM**: Serverless Application Model for local testing.</p>
-<p align='center'> - **Glue**: Managed ETL (Extract, Transform, Load) service.</p>
-<p align='center'> - **EventBridge**: Serverless event bus for application architecture.</p>
+<p align='center'> - EC2</p>
+<p align='center'> - S3</p>
+<p align='center'> - Lambda</p>
+<p align='center'> - CDK</p>
+<p align='center'> - SAM</p>
+<p align='center'> - Glue</p>
+<p align='center'> - EventBridge</p>
 
 
 
