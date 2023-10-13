@@ -1,10 +1,14 @@
-## <p align='center'> News-pipeline Architecture </p>
+## <p align='center'> News-pipeline Project </p>
 <br>
 <br>
 <br>
 
+<div align="center">
+  <img src="https://github.com/danielde720/news-pipeline/assets/141448979/c7bde838-3efc-4ca4-9287-89f3bdad818e" alt="model">
+</div>
 
-![Your Diagram's Alt Text](https://github.com/danielde720/news-pipeline/assets/141448979/155872ae-0e18-469e-af6c-50c176f2d388) 
+
+
 
 
 ## <p align='center'> Tech Stack </p>
@@ -17,18 +21,32 @@
 <p align='center'> - SAM</p>
 <p align='center'> - Glue</p>
 <p align='center'> - EventBridge</p>
+<p align='center'> - Redshift</p>
 
 
 
 ## <p align="center"> Overview </p>
 
-This project employs an event-driven and decoupled architecture to fetch the latest news about the boxer Canelo Alvarez, who recently had a big fight. Designed for resilience, scalability, and easy maintenance, the pipeline leverages a variety of AWS services. We use the [News API](https://newsapi.org/) as our data source, which provides a wide range of topics but comes with a 24-hour latency period. Our data storage solution involves an S3 bucket with two prefixes: one for raw data and another for transformed data. 
+This project employs an event-driven and decoupled architecture to fetch the latest news about the boxer Canelo Alvarez, who recently had a big fight. Designed for resilience, scalability, and easy maintenance, the pipeline leverages a variety of AWS services. We use the [News API](https://newsapi.org/) as our data source, which provides a wide range of topics but comes with a 24-hour latency period. Our data storage solution involves an s3 bucket for data coming in and redshift to store our transformed data. 
 
-We've implemented two Lambda functions: `fetch_load`, which fetches data from the News API in batches and stores it in the raw data bucket, and `trigger_glue`, which transforms and loads the data into the transformed data bucket. A utility function serves as an error handler for both `fetch_load` and `trigger_glue`, enhancing the robustness of our pipeline. 
+We've implemented two Lambda functions: `fetch_load`, which fetches data from the News API in batches and stores it in s3, and `trigger_glue`, which transforms and loads the data into redshift. A utility function serves as an error handler for both `fetch_load` and `trigger_glue`, enhancing the robustness of our pipeline. 
+
+For data transformation, we use a Glue notebook to fetch news data from the raw S3 bucket. The incoming data has a semi-structured format, and the schema is represented in the Entity-Relationship Diagram (ERD) below.
+<br>
+<br>
+<br>
+<div align="center">
+  <img src="https://github.com/danielde720/news-pipeline/assets/141448979/1cb364f2-d904-492f-920c-b1ed0f0f9a8e" alt="model">
+</div>
+<br>
+<br>
+<br>
+
+
 
 For data transformation, we use a Glue notebook to fetch data from the raw bucket, flatten it, and transform the files from JSON to Parquet format. The data is partitioned by dates for incremental loading and better organization. The pipeline is scheduled to run every 24 hours using EventBridge, which triggers the `fetch_load` Lambda function. An S3 event notification is then configured to run the Glue job whenever new data arrives in the raw bucket.
 
-![model](https://github.com/danielde720/news-pipeline/assets/141448979/1cb364f2-d904-492f-920c-b1ed0f0f9a8e)
+
 
 ### <p align="center"> Event-Driven Architecture </p>
 
