@@ -28,6 +28,7 @@ We've implemented two Lambda functions: `fetch_load`, which fetches data from th
 
 For data transformation, we use a Glue notebook to fetch data from the raw bucket, flatten it, and transform the files from JSON to Parquet format. The data is partitioned by dates for incremental loading and better organization. The pipeline is scheduled to run every 24 hours using EventBridge, which triggers the `fetch_load` Lambda function. An S3 event notification is then configured to run the Glue job whenever new data arrives in the raw bucket.
 
+![model](https://github.com/danielde720/news-pipeline/assets/141448979/1cb364f2-d904-492f-920c-b1ed0f0f9a8e)
 
 ### <p align="center"> Event-Driven Architecture </p>
 
