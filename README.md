@@ -4,7 +4,7 @@
 <br>
 
 <div align="center">
-  <img src="https://github.com/danielde720/news-pipeline/assets/141448979/c7bde838-3efc-4ca4-9287-89f3bdad818e" alt="model">
+  <img src="https://github.com/danielde720/news-pipeline/assets/141448979/0054a735-b023-47cf-ab20-5ac965119f46)" alt="model">
 </div>
 
 
@@ -22,6 +22,8 @@
 <p align='center'> - Glue</p>
 <p align='center'> - EventBridge</p>
 <p align='center'> - Redshift</p>
+<br>
+<br>
 
 
 
@@ -95,6 +97,7 @@ Each component in this pipeline is designed to be loosely coupled, allowing for 
 
 <br>
 <br>
+
 ### <p align="center"> Monitoring Slack Notifications </p>
 
 
@@ -102,6 +105,7 @@ The pipeline is monitored using Slack notifications. If any component fails, a n
 
 <br>
 <br>
+
 ### <p align="center"> Development and Deployment </p>
 
 - **AWS CDK**: The Lambda functions are defined and deployed using the AWS Cloud Development Kit (CDK), providing an infrastructure-as-code approach.
@@ -113,6 +117,7 @@ By combining these technologies, this pipeline offers a reliable and efficient w
 
 <br>
 <br>
+
 ## <p align="center"> Testing </p> 
 We have implemented unit tests for each Lambda function to ensure that they work as expected. These tests cover various scenarios and edge cases to validate the functionality and reliability of our code. In addition to unit tests, we've also incorporated data validation checks into our pipeline. These checks are designed to handle missing data and identify anomalies, ensuring that the data processed by our Lambdas is both accurate and reliable. By combining unit tests with data validation checks, this pipeline aims to create a robust and fault-tolerant system.
 <br>
