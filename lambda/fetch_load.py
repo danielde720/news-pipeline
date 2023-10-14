@@ -17,22 +17,37 @@ URL = f"https://newsapi.org/v2/everything?q=canelo&apiKey={API_KEY}"
 s3 = boto3.client('s3')
 
 #function to fetch data from the api 
-def fetch_news():
-    all_articles = []
-    for i in range(1, 6):
+def fetch_news(current_date):
+    all_articles = [] #Initialize a empty list 
+    utils = Utils()  # Initialize Utils class
+    article_count = 0 #initializing a counter since without it, it returns 25 articles for some reason and we just want 5. 
+    sent_notification = False # adding this to fix a bug where it was sending one notification per empty article so 5 total notifications which is not what we want.
+
+    for i in range(1, 6): 
         logging.info(f"Fetching news, page {i}")  
-        response = requests.get(URL)
-        if response.status_code == 200:
+        response = requests.get(URL) #fetching from the api
+        if response.status_code == 200: #Success 
             articles = response.json().get("articles", [])
-            if articles:
+            if articles: #if not empty
                 logging.info(f"Successfully fetched {len(articles)} articles.")  
                 all_articles.extend(articles)
+                article_count += len(articles) #incrementing our counter
             else:
                 logging.warning("Received an empty list of articles from the API.")  
+                if not sent_notification:
+                #Slack notification with date since the function is scheduled to run once a day, we can identify which batch was empty 
+                    utils.send_notification(f"Fetched an empty list of articles on {current_date}")
+                    sent_notification = True
         else:
             logging.error(f"Failed to fetch news: {response.status_code}")
-        time.sleep(1)
-    return all_articles
+        
+        #check to see if we reached 5 articles 
+        if article_count >= 5:
+            break #exits the loop
+
+        
+    return all_articles[:5] #Returns only the first 5 articles 
+
 #function to save the data 
 def save_articles_to_file(articles, current_date):
     if not articles:
@@ -55,6 +70,7 @@ def upload_file_to_s3(current_date):
         Key=s3_key
     )
     logging.info(f"Successfully uploaded {file_name} to S3")
+    
 #defining the handler for lambda 
 def lambda_handler(event, context):
     utils = Utils()
@@ -62,7 +78,7 @@ def lambda_handler(event, context):
         logging.info("Starting Lambda function")
         
         current_date = datetime.now().strftime('%Y-%m-%d')
-        articles = fetch_news()
+        articles = fetch_news(current_date)
         file_saved = save_articles_to_file(articles, current_date)  
         if file_saved:  # Only upload if the file was saved
             upload_file_to_s3(current_date)
