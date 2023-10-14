@@ -29,9 +29,9 @@
 
 This project employs an event-driven and decoupled architecture to fetch the latest news about the boxer Canelo Alvarez, who recently had a big fight. Designed for resilience, scalability, and easy maintenance, the pipeline leverages a variety of AWS services. We use the [News API](https://newsapi.org/) as our data source, which provides a wide range of topics but comes with a 24-hour latency period. Our data storage solution involves an s3 bucket for data coming in and redshift to store our transformed data. 
 
-We've implemented two Lambda functions: `fetch_load`, which fetches data from the News API in batches and stores it in s3, and `trigger_glue`, which transforms and loads the data into redshift. A utility function serves as an error handler for both `fetch_load` and `trigger_glue`, enhancing the robustness of our pipeline. 
+We've implemented two Lambda functions: `fetch_load`, which fetches data from the News API in batches and stores it in s3, and `trigger_glue`,which triggers a glue job that transforms and loads the data into redshift. A utility function serves as an error handler for both `fetch_load` and `trigger_glue`, enhancing the robustness of our pipeline. 
 
-For data transformation, we use a Glue notebook to fetch news data from the raw S3 bucket. The incoming data has a semi-structured format, and the schema is represented in the Entity-Relationship Diagram (ERD) below.
+For data transformation, we use a Glue notebook to fetch the latest news data from the s3 bucket, we do this by . The incoming data has a semi-structured format, and the schema is represented in the table below.
 <br>
 <br>
 <br>
@@ -43,8 +43,35 @@ For data transformation, we use a Glue notebook to fetch news data from the raw 
 <br>
 
 
+For data transformation, we utilize an AWS Glue notebook to fetch the latest news data stored in our S3 bucket. To ensure efficient and accurate processing, we employ a date-based batch system. The incoming data is saved in the S3 bucket and partitioned by date, allowing us to manage it more effectively.
 
-For data transformation, we use a Glue notebook to fetch data from the raw bucket, flatten it, and transform the files from JSON to Parquet format. The data is partitioned by dates for incremental loading and better organization. The pipeline is scheduled to run every 24 hours using EventBridge, which triggers the `fetch_load` Lambda function. An S3 event notification is then configured to run the Glue job whenever new data arrives in the raw bucket.
+We leverage Python's datetime module within the Glue notebook to dynamically generate today's date. This enables the Glue job to selectively fetch only the data corresponding to the current date, thereby avoiding any issues related to incremental loading. By doing so, we ensure that each Glue job processes only the most recent, relevant data, eliminating the need to sift through older records.
+
+
+Certainly! Here's a refined version of your explanation that elaborates on the normalization process and its benefits:
+
+Following the data retrieval, we proceed to transform the semi-structured news data into a normalized form. Specifically, we aim to achieve Fifth Normal Form (5NF) to ensure the highest level of data integrity and efficiency. In this process, we create multiple tables, each designed so that every column is an attribute solely of its primary key.
+
+We start by isolating the columns with multiple values, such as the 'source' column, and restructure them into atomic units. This ensures that each table represents a unique entity and eliminates any multi-valued attributes.
+
+By achieving 5NF, we eliminate any transitive dependencies and ensure that there is no data redundancy. This results in a schema where each piece of information is stored in its most logical location.
+
+Below is the Entity-Relationship Diagram (ERD) that visually represents this normalized schema.  
+<br>
+<br>
+<br>
+
+
+
+
+
+
+
+
+
+
+
+The pipeline is scheduled to run every 24 hours using EventBridge, which triggers the `fetch_load` Lambda function. An S3 event notification is then configured to run the Glue job whenever new data arrives in the raw bucket.
 
 
 
