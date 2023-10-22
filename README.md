@@ -120,6 +120,8 @@ By combining these technologies, this pipeline offers a reliable and efficient w
 
 ## <p align="center"> Testing </p> 
 We have implemented unit tests for each Lambda function to ensure that they work as expected. These tests cover various scenarios and edge cases to validate the functionality and reliability of our code. In addition to unit tests, we've also incorporated data validation checks into our pipeline. These checks are designed to handle missing data and identify anomalies, ensuring that the data processed by our Lambdas is both accurate and reliable. By combining unit tests with data validation checks, this pipeline aims to create a robust and fault-tolerant system.
+![Screenshot 2023-10-22 at 1 13 54 AM](https://github.com/danielde720/news-pipeline/assets/141448979/51660f6a-cdeb-4d57-959b-c2780de5870a)
+
 <br>
 <br>
 
