@@ -20,8 +20,8 @@ s3 = boto3.client('s3')
 def fetch_news(current_date):
     all_articles = [] #Initialize a empty list 
     utils = Utils()  # Initialize Utils class
-    article_count = 0 #initializing a counter since without it, it returns 25 articles for some reason and we just want 5. 
-    sent_notification = False # adding this to fix a bug where it was sending one notification per empty article so 5 total notifications which is not what we want.
+    article_count = 0 
+    sent_notification = False 
 
     for i in range(1, 6): 
         logging.info(f"Fetching news, page {i}")  
