@@ -48,11 +48,11 @@ For data transformation, we utilize an AWS Glue notebook to fetch the latest new
 We leverage Python's datetime module within the Glue notebook to dynamically generate today's date. This enables the Glue job to selectively fetch only the data corresponding to the current date, thereby avoiding any issues related to incremental loading. By doing so, we ensure that each Glue job processes only the most recent, relevant data, eliminating the need to sift through older records.
 
 
-Following the data retrieval, we proceed to transform the semi-structured news data into a normalized form. Specifically, we aim to achieve Fifth Normal Form (5NF) to ensure the highest level of data integrity and efficiency. In this process, we create multiple tables, each designed so that every column is an attribute solely of its primary key.
+Following the data retrieval, we proceed to transform the semi-structured news data into a normalized form. Specifically, we aim to achieve Third Normal Form (3NF) to ensure data integrity and efficiency. In this process, we create multiple tables, each designed so that every column is an attribute solely of its primary key.
 
 We start by isolating the columns with multiple values, such as the 'source' column, and restructure them into atomic units. This ensures that each table represents a unique entity and eliminates any multi-valued attributes.
 
-By achieving 5NF, we eliminate any dependencies and ensure that there is no data redundancy. This results in a schema where each piece of information is stored in its most logical location.
+This results in a schema where each piece of information is stored in its most logical location.
 
 Below is the Entity-Relationship Diagram (ERD) that visually represents this normalized schema.  
 
